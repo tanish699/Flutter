@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:registration_flow/pages/login.dart';
 import '../utils/images.dart';
+import '../widgets/custombutton.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,21 +53,17 @@ class LandingPage extends StatelessWidget {
                 //Button
                 Align(
                   alignment: Alignment.centerRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => FormPage()),
-                      // );
+                  child: CustomButton(
+                    text: "Continue →",
+                    width: 150,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => loginPage(),
+                        ),
+                      );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Text("Continue →"),
                   ),
                 ),
                 SizedBox(height: 20),
