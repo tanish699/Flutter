@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:registration_flow/pages/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/images.dart';
 import '../widgets/custombutton.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+  final email = prefs.getString("email");
+
+
+  runApp(MyApp(isLoggedIn: email != null));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
 
   // This widget is the root of your application.
   @override

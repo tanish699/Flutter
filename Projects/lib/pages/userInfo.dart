@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration_flow/pages/login.dart';
 import '../database/database_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +49,55 @@ class _userinfoState extends State<userinfo> {
     }
   }
 
+  // Logout
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            "Logout",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("No"),
+            ),
+
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+              ),
+              onPressed: () async {
+                await _logout();
+              },
+              child: const Text("Yes"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("email"); // clear session
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => loginPage()),
+          (route) => false,
+    );
+  }
+
 
 
   @override
@@ -64,8 +114,18 @@ class _userinfoState extends State<userinfo> {
 
             SizedBox(height: 50),
 
-
-            Text("Hi, ${firstName ?? ""} ${lastName ?? ""}", style: TextStyle(fontSize: 22)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Hi, ${firstName ?? ""} ${lastName ?? ""}", style: TextStyle(fontSize: 22)),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () {
+                    _showLogoutDialog();
+                  },
+                ),
+              ],
+            ),
 
 
             SizedBox(height: 30),
