@@ -102,6 +102,7 @@ class _loginPageState extends State<loginPage> {
                       //button
                       CustomButton(
                           text: "Login",
+                          borderRadius: 10,
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               final authService = AuthService();
@@ -126,6 +127,35 @@ class _loginPageState extends State<loginPage> {
 
                           }
                       ),
+
+                      const SizedBox(height: 40),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Don't have account ?",
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => RegisterPage()),
+                              );
+                            },
+                            child: const Text(
+                              "Register",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          )
+                        ],
+
+                      )
 
                     ],
                   ),
