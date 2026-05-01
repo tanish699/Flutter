@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:registration_flow/pages/login.dart';
+import 'package:registration_flow/pages/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/images.dart';
 import '../widgets/custombutton.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:  LandingPage(),
+      home:  isLoggedIn ? const userProfile() : LandingPage(),
     );
   }
 }

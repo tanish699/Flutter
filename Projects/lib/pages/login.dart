@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:registration_flow/pages/profile.dart';
 import 'package:registration_flow/pages/registration.dart';
 import 'package:registration_flow/pages/userInfo.dart';
 import 'package:registration_flow/services/authentication.dart';
@@ -122,7 +123,7 @@ class _loginPageState extends State<loginPage> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => userinfo()
+                                      builder: (context) => userProfile()
                                   ),
                                 );
                               } else {

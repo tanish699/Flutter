@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:registration_flow/pages/profile.dart';
 import 'package:registration_flow/pages/userInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../database/database_helper.dart';
@@ -318,7 +319,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (_) => userinfo()),
+                            MaterialPageRoute(builder: (_) => userProfile()),
                           );
                         } else {
                           FlushbarUtil.showError(
