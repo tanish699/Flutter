@@ -4,12 +4,16 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final TextEditingController controller;
   final bool isPassword;
+  final String? Function(String?)? validator;
+  final Function(String)? onChanged;
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.controller,
     this.isPassword = false,
+    this.validator,
+    this.onChanged,
   });
 
   @override
@@ -24,6 +28,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       controller: widget.controller,
       obscureText: widget.isPassword ? !isPasswordVisible : false,
+
+      onChanged: widget.onChanged,
+      
       decoration: InputDecoration(
         labelText: widget.label,
         suffixIcon: widget.isPassword
@@ -42,15 +49,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         )
             : null,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "This field is required";
-        }
-        if (!widget.isPassword && !value.contains("@")) {
-          return "Enter valid email";
-        }
-        return null;
-      },
+      validator: widget.validator,
     );
   }
 }
