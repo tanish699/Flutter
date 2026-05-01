@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../database/database_helper.dart';
 import '../widgets/custombutton.dart';
+import 'editprofile.dart';
 import 'login.dart';
 
 class userProfile extends StatefulWidget {
@@ -95,12 +96,12 @@ class _UserProfileState extends State<userProfile> {
 
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
+                backgroundColor: Colors.red,
               ),
               onPressed: () async {
                 await _logout();
               },
-              child: const Text("Yes"),
+              child: const Text("Yes", style: TextStyle(color: Colors.white),),
             ),
           ],
         );
@@ -127,6 +128,21 @@ class _UserProfileState extends State<userProfile> {
         title: const Text("My Profile"),
         backgroundColor: Colors.orange,
         centerTitle: true,
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const EditProfilePage(),
+                ),
+              );
+              loadUser();
+            },
+          ),
+        ],
       ),
 
       body: isLoading
@@ -171,13 +187,14 @@ class _UserProfileState extends State<userProfile> {
                     _buildTile("Gender", gender ?? "-"),
                     const SizedBox(height: 40),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 80),
 
                     Align(
                       alignment: Alignment.center,
                       child: CustomButton(
                         text: "Logout",
                         borderRadius: 10,
+                        color: Colors.red,
                         onTap: () {
                           _showLogoutDialog();
                         },
