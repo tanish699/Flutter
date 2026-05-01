@@ -1,13 +1,16 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:registration_flow/pages/userInfo.dart';
+import 'package:registration_flow/services/authentication.dart';
 import 'package:registration_flow/utils/images.dart';
 import 'package:registration_flow/widgets/custombutton.dart';
 import 'package:registration_flow/widgets/textfield.dart';
 import 'package:registration_flow/pages/userInfo.dart';
-
-
+import '../utils/emailvalidator.dart';
 import '../widgets/custombutton.dart';
+import 'package:registration_flow/utils/toastbar.dart';
+
 
 
 class loginPage extends StatefulWidget {
@@ -73,6 +76,10 @@ class _loginPageState extends State<loginPage> {
                       CustomTextField(
                           label: "Email",
                           controller: emailController,
+                          onChanged: (value){
+                            _formKey.currentState!.validate();
+                          },
+                        validator: Validator.validateEmail,
                       ),
 
                       const SizedBox(height: 20),
@@ -81,7 +88,13 @@ class _loginPageState extends State<loginPage> {
                       CustomTextField(
                           label: "Password",
                           controller: passwordController,
-                        isPassword: true,
+                          isPassword: true,
+                        validator: (value){
+                            if(value == null || value.isEmpty){
+                              return "Password is required";
+                            }
+                            return null;
+                        },
                       ),
 
                       const SizedBox(height: 30,),
@@ -89,13 +102,28 @@ class _loginPageState extends State<loginPage> {
                       //button
                       CustomButton(
                           text: "Login",
-                          onTap: (){
-                             Navigator.push(
-                                 context,
-                                 MaterialPageRoute(
-                                     builder: (context) => userinfo()
-                                 ),
-                             );
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              final authService = AuthService();
+
+                              final isLoggedIn = await authService.login(
+                                emailController.text.trim(),
+                                passwordController.text.trim(),
+                              );
+
+                              if(isLoggedIn){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => userinfo()
+                                  ),
+                                );
+                              } else {
+                                   FlushbarUtil.showError(context, "Invalid email or password");
+
+                              }
+                            }
+
                           }
                       ),
 
