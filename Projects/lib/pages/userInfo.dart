@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class userinfo extends StatefulWidget {
 
@@ -25,20 +27,23 @@ class _userinfoState extends State<userinfo> {
 
   // Load Data from db
   void loadData() async {
-    final users = await DataBaseHelper.instance.getAllUsers();
+    final prefs = await SharedPreferences.getInstance();
 
-    if (users.isNotEmpty) {
-      final latestUser = users.last; // get last inserted user
+    final savedEmail = prefs.getString("email");
 
+    if (savedEmail == null) return;
 
+    final user = await DataBaseHelper.instance.getUserByEmail(savedEmail);
+
+    if (user!=null) {
       setState(() {
-        firstName = latestUser['firstName'];
-        lastName = latestUser['lastName'];
-        email = latestUser['email'];
-        contact = latestUser['contact'];
-        dob = latestUser['dob'];
-        gender = latestUser['gender'];
-        country = latestUser['country'];
+        firstName = user['firstName'];
+        lastName = user['lastName'];
+        email = user['email'];
+        contact = user['contact'];
+        dob = user['dob'];
+        gender = user['gender'];
+        country = user['country'];
       });
     }
   }
