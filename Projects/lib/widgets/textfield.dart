@@ -30,7 +30,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: widget.isPassword ? !isPasswordVisible : false,
 
       onChanged: widget.onChanged,
-      
+
       decoration: InputDecoration(
         labelText: widget.label,
         suffixIcon: widget.isPassword
