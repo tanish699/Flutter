@@ -1,12 +1,14 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:registration_flow/pages/registration.dart';
 import 'package:registration_flow/pages/userInfo.dart';
 import 'package:registration_flow/services/authentication.dart';
 import 'package:registration_flow/utils/images.dart';
 import 'package:registration_flow/widgets/custombutton.dart';
 import 'package:registration_flow/widgets/textfield.dart';
 import 'package:registration_flow/pages/userInfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/emailvalidator.dart';
 import '../widgets/custombutton.dart';
 import 'package:registration_flow/utils/toastbar.dart';
@@ -113,7 +115,11 @@ class _loginPageState extends State<loginPage> {
                               );
 
                               if(isLoggedIn){
-                                Navigator.push(
+
+                                final prefs = await SharedPreferences.getInstance();
+                                await prefs.setString("email", emailController.text.trim());
+
+                                Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => userinfo()
