@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
 // import 'package:registration_flow/pages/login.dart';
 // import 'package:registration_flow/pages/profile.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:traning_task_2/pages/home.dart';
+import 'package:traning_task_2/pages/login.dart';
+import 'package:traning_task_2/pages/userdetail.dart';
 import '../utils/images.dart';
 // import '../widgets/custombutton.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // final prefs = await SharedPreferences.getInstance();
-  // final email = prefs.getString("email");
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString("accessToken");
 
 
-  // runApp(MyApp(isLoggedIn: email != null));
+  runApp(MyApp(isLoggedIn: token != null));
 }
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({required this.isLoggedIn});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   home:  isLoggedIn ? const userProfile() : LandingPage(),
-    // );
-    return MaterialApp(home: LandingPage());
+    return MaterialApp(
+      home:  isLoggedIn ?  home() : loginPage(),
+    );
+    // return MaterialApp(home: LandingPage());
   }
 }
 
