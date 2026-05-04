@@ -6,6 +6,11 @@ import '../database/database_helper.dart';
 import '../widgets/custombutton.dart';
 import 'editprofile.dart';
 import 'login.dart';
+import 'package:image_picker/image_picker.dart';
+import '../services/image_service.dart';
+import '../widgets/image_source_sheet.dart';
+import '../widgets/profile_avatar.dart';
+import 'dart:io';
 
 class userProfile extends StatefulWidget {
   const userProfile({super.key});
@@ -22,8 +27,11 @@ class _UserProfileState extends State<userProfile> {
   String? country;
   String? firstName;
   String? lastName;
+  String? _profileImagePath;
 
   bool isLoading = true;
+
+  final ImageService _imageService = ImageService();
 
   @override
   void initState() {
@@ -56,6 +64,26 @@ class _UserProfileState extends State<userProfile> {
     } else {
       setState(() => isLoading = false);
     }
+
+    _profileImagePath = prefs.getString("profile_image_$savedEmail");
+    setState(() {});
+  }
+
+  Future<void> _handleProfileImageUpload(ImageSource source) async {
+    final File? image = await _imageService.pickAndCropImage(
+      source: source,
+      context: context,
+    );
+
+    if (image == null) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString("email");
+    if (savedEmail != null) {
+      await prefs.setString("profile_image_$savedEmail", image.path);
+    }
+
+    setState(() => _profileImagePath = image.path);
   }
 
   //Calculate age
@@ -156,10 +184,12 @@ class _UserProfileState extends State<userProfile> {
                     const SizedBox(height: 20),
 
                     //Profile Icon
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.orange,
-                      child: Icon(Icons.person, size: 60, color: Colors.white),
+                    ProfileAvatar(
+                      imagePath: _profileImagePath,
+                      onTap: () => ImageSourceSheet.show(
+                        context,
+                        onSourceSelected: _handleProfileImageUpload,
+                      ),
                     ),
 
                     const SizedBox(height: 20),
@@ -215,12 +245,18 @@ class _UserProfileState extends State<userProfile> {
 
 Widget _buildTile(String title, String value) {
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 10),
+    padding: const EdgeInsets.symmetric(vertical: 12),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Flexible(child: Text(value, textAlign: TextAlign.right)),
+        Text(title,
+            style: const TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 15)),
+        Flexible(
+          child: Text(value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 15)),
+        ),
       ],
     ),
   );
