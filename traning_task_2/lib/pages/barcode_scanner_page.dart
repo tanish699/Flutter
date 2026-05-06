@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/images.dart';
+import '../widgets/camera_preview_box.dart';
 
 class BarcodeScannerPage extends StatefulWidget {
   const BarcodeScannerPage({super.key});
@@ -55,22 +56,14 @@ class _BarcodeScannerPageState extends State<BarcodeScannerPage> {
 
               // ---------- barcode BOX ----------
               Center(
-                child: Container(
+                child: CameraPreviewBox(
                   height: 170,
                   width: 400,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.orange,
-                      width: 4,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child:  Center(
-                    child: Icon(
-                      Icons.document_scanner,
-                      size: 100,
-                      color: Colors.orange,
-                    ),
+
+                  fallbackIcon: const Icon(
+                    Icons.document_scanner,
+                    size: 100,
+                    color: Colors.orange,
                   ),
                 ),
               ),

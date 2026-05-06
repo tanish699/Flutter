@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/camera_preview_box.dart';
+
 class QRScannerPage extends StatefulWidget {
   const QRScannerPage({super.key});
 
@@ -53,22 +55,14 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
               // ---------- QR BOX ----------
               Center(
-                child: Container(
+                child: CameraPreviewBox(
                   height: 250,
                   width: 250,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.orange,
-                      width: 4,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.qr_code_scanner,
-                      size: 120,
-                      color: Colors.orange,
-                    ),
+
+                  fallbackIcon: const Icon(
+                    Icons.qr_code_scanner,
+                    size: 120,
+                    color: Colors.orange,
                   ),
                 ),
               ),
