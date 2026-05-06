@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:traning_task_2/pages/qr_scanner_page.dart';
 import 'package:traning_task_2/utils/images.dart';
+import 'package:traning_task_2/widgets/expandable_fab.dart';
+import 'package:traning_task_2/widgets/floatingbutton.dart';
+
+import 'barcode_scanner_page.dart';
 
 class home extends StatefulWidget {
   @override
@@ -8,14 +13,11 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   int _currentIndex = 0;
+  bool isFabExpanded = false;
   final PageController _pageController = PageController();
 
   // Titles for AppBar
-  final List<String> _titles = [
-    "My Visits",
-    "My Contacts",
-    "Settings",
-  ];
+  final List<String> _titles = ["My Visits", "My Contacts", "Settings"];
 
   // Pages
   final List<Widget> _pages = [
@@ -60,21 +62,33 @@ class _homeState extends State<home> {
         centerTitle: true,
       ),
 
-      // 🔶 Body with Swipe
+      // Body with Swipe
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
         children: _pages,
       ),
 
-      // 🔶 Floating Button
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("FAB Clicked");
-        },
-        backgroundColor: Colors.orange.shade200,
-        child: Icon(Icons.add),
+      // Floating Button
+      floatingActionButton: ExpandableFab(
+          onQrTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const QRScannerPage(),
+              ),
+            );
+          },
+          onBarTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const BarcodeScannerPage(),
+              ),
+            );
+          }
       ),
+
 
       // 🔶 Bottom Navigation
       bottomNavigationBar: BottomNavigationBar(

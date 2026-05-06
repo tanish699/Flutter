@@ -1,6 +1,6 @@
 
 
-class AppImages{
+class AppImages {
 
   static const String welcome = "assets/images/welcome_background.png";
   static const String registrationHeader = "assets/images/register_background.png";
@@ -10,5 +10,6 @@ class AppImages{
   static const String settings = "assets/images/settings.png";
   static const String user = "assets/images/user_logo.png";
   static const String visit = "assets/images/visit.png";
+  // static const String barcode = "assets/images/barcode.png";
 
 }
