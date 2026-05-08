@@ -3,6 +3,7 @@ import 'package:traning_task_2/pages/qr_scanner_page.dart';
 import 'package:traning_task_2/utils/images.dart';
 import 'package:traning_task_2/widgets/expandable_fab.dart';
 import 'package:traning_task_2/widgets/floatingbutton.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'barcode_scanner_page.dart';
 
@@ -19,12 +20,198 @@ class _homeState extends State<home> {
   // Titles for AppBar
   final List<String> _titles = ["My Visits", "My Contacts", "Settings"];
 
+  // ================= OPEN IN APP =================
+
+  Future<void> openInAppBrowser() async {
+
+    final Uri url = Uri.parse(
+      "https://flutter.dev",
+    );
+
+    await launchUrl(
+      url,
+      mode: LaunchMode.inAppBrowserView,
+    );
+  }
+
+// ================= OPEN EXTERNAL =================
+
+  Future<void> openExternalBrowser() async {
+
+    final Uri url = Uri.parse(
+      "https://flutter.dev",
+    );
+
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+  }
+
+  void showAboutDialogBox() {
+
+    showDialog(
+
+      context: context,
+
+      builder: (context) {
+
+        return Dialog(
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+
+              children: [
+
+                const Text(
+                  "About Us",
+
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                // ---------- APP DEVELOPMENT ----------
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+
+                  child: ElevatedButton(
+
+                    onPressed: openInAppBrowser,
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange.shade300,
+                    ),
+
+                    child: const Text(
+                      "App Development",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // ---------- MAIN WEBSITE ----------
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+
+                  child: ElevatedButton(
+
+                    onPressed: openExternalBrowser,
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange.shade300,
+                    ),
+
+                    child: const Text(
+                      "Main Website",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // ---------- BACK ----------
+
+                OutlinedButton(
+
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+
+                  child: const Text(
+                    "Back",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // Pages
-  final List<Widget> _pages = [
-    Center(child: Image.asset(AppImages.visit)),
-    Center(child: Image.asset(AppImages.contact)),
-    Center(child: Image.asset(AppImages.settings)),
-  ];
+  List<Widget> getPages() {
+
+    return [
+
+      // ---------- VISITS ----------
+
+      Center(
+        child: Image.asset(AppImages.visit),
+      ),
+
+      // ---------- CONTACTS ----------
+
+      Center(
+        child: Image.asset(AppImages.contact),
+      ),
+
+      // ---------- SETTINGS ----------
+
+      Padding(
+        padding: const EdgeInsets.all(16),
+
+        child: Column(
+
+          children: [
+
+            Container(
+
+              decoration: BoxDecoration(
+                color: Colors.orange.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+
+              child: ListTile(
+
+                leading: const Icon(Icons.search),
+
+                title: const Text(
+                  "About Us",
+                ),
+
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 18,
+                ),
+
+                onTap: () {
+
+                  showAboutDialogBox();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -66,7 +253,7 @@ class _homeState extends State<home> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children: _pages,
+        children: getPages(),
       ),
 
       // Floating Button
