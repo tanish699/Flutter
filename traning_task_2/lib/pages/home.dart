@@ -6,6 +6,7 @@ import 'package:traning_task_2/widgets/floatingbutton.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'barcode_scanner_page.dart';
+import 'contact_page.dart';
 
 class home extends StatefulWidget {
   @override
@@ -168,9 +169,7 @@ class _homeState extends State<home> {
 
       // ---------- CONTACTS ----------
 
-      Center(
-        child: Image.asset(AppImages.contact),
-      ),
+      const ContactsPage(),
 
       // ---------- SETTINGS ----------
 
