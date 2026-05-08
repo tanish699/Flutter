@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../widgets/camera_preview_box.dart';
 
@@ -12,6 +13,26 @@ class QRScannerPage extends StatefulWidget {
 class _QRScannerPageState extends State<QRScannerPage> {
 
   String scannedResult = "No QR code scanned yet";
+
+  void shareResult() {
+
+    if (scannedResult.isNotEmpty) {
+
+      Share.share(
+        "Scanned Result:\n\n$scannedResult",
+        subject: "QR / Barcode Result",
+      );
+
+    } else {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+
+        const SnackBar(
+          content: Text("No scanned result to share"),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +122,37 @@ class _QRScannerPageState extends State<QRScannerPage> {
                   ),
                 ),
               ),
+
+              const SizedBox(height: 30),
+
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+
+                child: ElevatedButton.icon(
+
+                  onPressed: shareResult,
+
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+
+                  icon: const Icon(Icons.share),
+
+                  label: const Text(
+                    "Share Result",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+
             ],
           ),
         ),
