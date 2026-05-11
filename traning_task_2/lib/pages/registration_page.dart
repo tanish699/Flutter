@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traning_task_2/pages/home.dart';
+import '../services/email_services.dart';
 import '../services/passEncryptor.dart';
 import '../utils/emailvalidator.dart';
 import '../utils/images.dart';
@@ -10,6 +11,9 @@ import '../widgets/custom_radio_group.dart';
 import '../widgets/custombutton.dart';
 import '../widgets/textfield.dart';
 import '../services/auth_services_firebase.dart';
+import 'dart:math';
+
+import 'otp_verification_page.dart';
 
 
 class RegisterPage extends StatefulWidget {
@@ -25,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool showGenderError = false;
   bool isChecked = false;
   bool showCheckboxError = false;
+  bool isLoading = false;
 
   final formKey = GlobalKey<FormState>();
   final AuthService _authService = AuthService();
@@ -38,6 +43,15 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
   TextEditingController();
+
+  // To generate OTP
+  String generateOtp() {
+
+    Random random = Random();
+
+    return (100000 + random.nextInt(900000))
+        .toString();
+  }
 
   @override
   void initState() {
@@ -242,6 +256,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     CustomButton(
                       text: "Register",
                       onTap: () async {
+                        if (isLoading) return;
+
+                        setState(() {
+
+                          isLoading = true;
+
+                        });
                         setState(() {
                           showGenderError = selectedGender == null;
                           showCheckboxError = !isChecked;
@@ -266,7 +287,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                               firstName: firstNameController.text,
                               lastName: lastNameController.text,
-                              email: emailController.text.trim(),
+                              email: emailController.text.trim().toLowerCase(),
                               password: passwordController.text.trim(),
 
                               phone: contactController.text,
@@ -275,18 +296,50 @@ class _RegisterPageState extends State<RegisterPage> {
                             );
 
                             if (success) {
+                              // ================= GENERATE OTP =================
+                              String otp = generateOtp();
+                              debugPrint("OTP: $otp");
+                              // ================= SEND EMAIL =================
+                              final emailService = EmailService();
+
+                              bool emailSent = await emailService.sendOtpEmail(
+                                toEmail: emailController.text.trim(),
+                                otp: otp,
+                              );
+                              print("EMAIL SENT STATUS: $emailSent");
 
                               FlushbarUtil.showSuccess(
                                 context,
+
                                 "Registered Successfully",
                               );
 
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => home(),
-                                ),
-                              );
+                              if (emailSent) {
+
+                                FlushbarUtil.showSuccess(
+                                  context,
+                                  "OTP Sent Successfully",
+                                );
+
+                                Navigator.push(
+
+                                  context,
+
+                                  MaterialPageRoute(
+
+                                    builder: (_) => OtpVerificationPage(
+                                      generatedOtp: otp,
+                                    ),
+                                  ),
+                                );
+
+                              } else {
+
+                                FlushbarUtil.showError(
+                                  context,
+                                  "Failed to send OTP email",
+                                );
+                              }
 
                             } else {
 

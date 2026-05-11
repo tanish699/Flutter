@@ -12,9 +12,13 @@ class FirebaseAuthService {
 
   Future<String?> registerUser({
 
-    required String name,
+    required String firstName,
+    required String lastName,
     required String email,
     required String password,
+    required String phone,
+    required String dob,
+    required String gender,
 
   }) async {
 
@@ -30,17 +34,47 @@ class FirebaseAuthService {
           .doc(userCredential.user!.uid)
           .set({
 
-        "name": name,
-        "email": email,
         "uid": userCredential.user!.uid,
+        "firstName": firstName,
+        "lastName": lastName,
+        "email": email,
+        "phone": phone,
+        "dob": dob,
+        "gender": gender,
       });
 
       return null;
 
     } on FirebaseAuthException catch (e) {
 
-      debugPrint(e.message);
+      debugPrint("Firebase error: ${e.message}",);
       return e.message;
+    }  catch (e) {
+      debugPrint(
+        "Register Error: $e",
+      );
+      return e.toString();
     }
+  }
+
+  // ================= LOGIN =================
+
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return true;
+    } on FirebaseAuthException catch (e) {
+      debugPrint(
+        "Login Error: ${e.message}",
+      );
+      return false;
+    }
+
   }
 }
