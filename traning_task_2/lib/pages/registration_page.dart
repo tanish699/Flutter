@@ -306,6 +306,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                 toEmail: emailController.text.trim(),
                                 otp: otp,
                               );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => OtpVerificationPage(
+                                    generatedOtp: otp,
+                                  ),
+                                ),
+                              );
                               print("EMAIL SENT STATUS: $emailSent");
 
                               FlushbarUtil.showSuccess(

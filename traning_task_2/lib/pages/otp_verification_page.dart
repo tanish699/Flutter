@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpVerificationPage extends StatefulWidget {
 
@@ -15,11 +16,32 @@ class OtpVerificationPage extends StatefulWidget {
       _OtpVerificationPageState();
 }
 
-class _OtpVerificationPageState
-    extends State<OtpVerificationPage> {
+class _OtpVerificationPageState extends State<OtpVerificationPage> with CodeAutoFill {
 
-  final TextEditingController otpController =
-  TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    listenForCode();
+  }
+
+  @override
+  void codeUpdated() {
+
+    if (code != null) {
+      otpController.text = code!;
+    }
+  }
+
+  @override
+  void dispose() {
+    cancel();
+    otpController.dispose();
+    super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
