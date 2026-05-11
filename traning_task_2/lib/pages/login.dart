@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traning_task_2/pages/home.dart';
 import 'package:traning_task_2/pages/profile.dart';
+import 'package:traning_task_2/pages/registration_page.dart';
 // import 'package:traning_task_2/pages/registration.dart';
 // import 'package:registration_flow/services/authentication.dart';
 import 'package:traning_task_2/utils/images.dart';
@@ -10,9 +11,8 @@ import 'package:traning_task_2/widgets/custombutton.dart';
 import 'package:traning_task_2/widgets/textfield.dart';
 import 'package:traning_task_2/pages/userdetail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/auth_services.dart';
+import '../services/auth_services_firebase.dart';
 import '../utils/emailvalidator.dart';
-import '../widgets/custombutton.dart';
 import 'package:traning_task_2/utils/toastbar.dart';
 
 
@@ -116,8 +116,8 @@ class _loginPageState extends State<loginPage> {
                               final authService = AuthService();
 
                               final isLoggedIn = await authService.login(
-                                emailController.text.trim(),
-                                passwordController.text.trim(),
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
                               );
 
                               if(isLoggedIn){
@@ -147,13 +147,14 @@ class _loginPageState extends State<loginPage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => RegisterPage()),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => RegisterPage()),
+                              );
                             },
                             child: const Text(
                               "Register",
+
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,

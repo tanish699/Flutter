@@ -41,6 +41,41 @@ class AuthService {
     return false;
   }
 
+  //Register
+  Future<bool> register({
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String password,
+  }) async {
+
+    try {
+
+      final response = await _dio.post(
+        "https://dummyjson.com/users/add",
+
+        data: {
+          "firstName": firstName,
+          "lastName": lastName,
+          "email": email,
+          "password": password,
+        },
+      );
+
+      if (response.statusCode == 200 ||
+          response.statusCode == 201) {
+
+        return true;
+      }
+
+    } catch (e) {
+
+      print("Register Error: $e");
+    }
+
+    return false;
+  }
+
   Future<Map<String, dynamic>?> getUser() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("accessToken");

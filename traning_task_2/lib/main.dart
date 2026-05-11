@@ -7,9 +7,11 @@ import 'package:traning_task_2/pages/login.dart';
 import 'package:traning_task_2/pages/userdetail.dart';
 import '../utils/images.dart';
 // import '../widgets/custombutton.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString("accessToken");
