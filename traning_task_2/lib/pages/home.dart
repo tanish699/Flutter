@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traning_task_2/pages/qr_scanner_page.dart';
 import 'package:traning_task_2/utils/images.dart';
 import 'package:traning_task_2/widgets/expandable_fab.dart';
@@ -7,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'barcode_scanner_page.dart';
 import 'contact_page.dart';
+import 'login.dart';
 
 class home extends StatefulWidget {
   @override
@@ -156,6 +159,30 @@ class _homeState extends State<home> {
     );
   }
 
+  // ================= LOGOUT =================
+
+  Future<void> logout() async {
+
+    // Firebase logout
+    await FirebaseAuth.instance.signOut();
+
+    // Clear local storage
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    // Navigate to login page
+    Navigator.pushAndRemoveUntil(
+
+      context,
+
+      MaterialPageRoute(
+        builder: (_) => const loginPage(),
+      ),
+
+          (route) => false,
+    );
+  }
+
   // Pages
   List<Widget> getPages() {
 
@@ -246,6 +273,19 @@ class _homeState extends State<home> {
         title: Text(_titles[_currentIndex]),
         backgroundColor: Colors.orange.shade300,
         centerTitle: true,
+
+        actions: [
+          IconButton(
+            onPressed: () {
+              logout();
+            },
+
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
 
       // Body with Swipe

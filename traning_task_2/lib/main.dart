@@ -8,10 +8,12 @@ import 'package:traning_task_2/pages/userdetail.dart';
 import '../utils/images.dart';
 // import '../widgets/custombutton.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await NotificationService().init();
 
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString("accessToken");

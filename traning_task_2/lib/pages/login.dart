@@ -2,18 +2,18 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:traning_task_2/pages/home.dart';
-import 'package:traning_task_2/pages/profile.dart';
 import 'package:traning_task_2/pages/registration_page.dart';
 // import 'package:traning_task_2/pages/registration.dart';
 // import 'package:registration_flow/services/authentication.dart';
 import 'package:traning_task_2/utils/images.dart';
 import 'package:traning_task_2/widgets/custombutton.dart';
 import 'package:traning_task_2/widgets/textfield.dart';
-import 'package:traning_task_2/pages/userdetail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_services_firebase.dart';
 import '../utils/emailvalidator.dart';
 import 'package:traning_task_2/utils/toastbar.dart';
+import 'welcome_page.dart';
+import '../services/notification_service.dart';
 
 
 
@@ -115,21 +115,33 @@ class _loginPageState extends State<loginPage> {
                             if (_formKey.currentState!.validate()) {
                               final authService = AuthService();
 
-                              final isLoggedIn = await authService.login(
-                                email: emailController.text.trim(),
+                              final firstName = await authService.login(
+                                email: emailController.text.trim().toLowerCase(),
                                 password: passwordController.text.trim(),
                               );
 
-                              if(isLoggedIn){
+                              if(firstName != null){
+
+                                await NotificationService().showNotification(
+
+                                  title: "Login Successful",
+
+                                  body: "You have successfully logged in 🎉",
+                                );
+
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => home()
+                                    builder: (context) => WelcomePage(
+                                      firstName: firstName,
+                                    ),
                                   ),
                                 );
                               } else {
-                                FlushbarUtil.showError(context, "Invalid email or password");
-
+                                FlushbarUtil.showError(
+                                  context,
+                                  "Invalid email or password",
+                                );
                               }
                             }
 

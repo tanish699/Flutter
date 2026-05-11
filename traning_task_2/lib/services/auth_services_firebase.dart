@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class AuthService {
 
@@ -59,55 +60,33 @@ class AuthService {
 
   // ================= LOGIN =================
 
-  Future<bool> login({
+  Future<String?> login({
+
     required String email,
     required String password,
+
   }) async {
-
     try {
-
-      await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      return true;
-
-    } catch (e) {
-
-      print("Login Error: $e");
-      return false;
+      // ================= GET USER DATA =================
+      DocumentSnapshot userData = await _firestore.collection("users").doc(userCredential.user!.uid).get();
+      // Return first name
+      return userData["firstName"];
     }
-  }
 
-  // ================= GET USER =================
-
-  Future<Map<String, dynamic>?> getUser() async {
-
-    try {
-
-      User? user = _auth.currentUser;
-
-      if (user == null) return null;
-
-      final doc = await _firestore
-          .collection("users")
-          .doc(user.uid)
-          .get();
-
-      return doc.data();
-
-    } catch (e) {
-
-      print("Get User Error: $e");
+    on FirebaseAuthException catch (e) {
+      debugPrint("Login Error: ${e.message}",);
       return null;
     }
   }
 
-  // ================= LOGOUT =================
+  // ================= LOGOUT =================//
 
   Future<void> logout() async {
-
     await _auth.signOut();
   }
 }
